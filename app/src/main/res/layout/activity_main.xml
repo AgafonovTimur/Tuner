@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/app"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#050504"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/screen_bg"
+        android:padding="18dp">
+
+        <!-- A4 frequency selector -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/minusBtn"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/circle_button_bg"
+                android:gravity="center"
+                android:text="−"
+                android:textColor="#E8C400"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.3"
+                    android:text="A"
+                    android:textColor="#5A4F00"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/a4Value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="432 Hz"
+                    android:textColor="#E8C400"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/plusBtn"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/circle_button_bg"
+                android:gravity="center"
+                android:text="+"
+                android:textColor="#E8C400"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- profile switch -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/profChromatic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_btn_active"
+                android:letterSpacing="0.05"
+                android:paddingLeft="16dp"
+                android:paddingTop="7dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="7dp"
+                android:text="ХРОМАТИЧЕСКИЙ"
+                android:textColor="#0A0A08"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:id="@+id/profGusli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_btn_inactive"
+                android:letterSpacing="0.05"
+                android:paddingLeft="16dp"
+                android:paddingTop="7dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="7dp"
+                android:text="ГУСЛИ"
+                android:textColor="#5A4F00"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- volume + note -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="26dp"
+                android:layout_height="200dp"
+                android:background="@drawable/volume_track_bg"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/volFill"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/volume_fill_bg" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/noteText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="#E8C400"
+                    android:textSize="90sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/noteSharp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text=""
+                    android:textColor="#E8C400"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/noteOctave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="14dp"
+                    android:text=""
+                    android:textColor="#E8C400"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- cents scale -->
+        <com.tunerapp.chromatic.CentsScaleView
+            android:id="@+id/centsScale"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="4dp" />
+
+        <!-- freq / cents readout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/freqReadout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.0 Hz"
+                android:textColor="#E8C400"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/centsReadout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="0 cents"
+                android:textColor="#E8C400"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/statusMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:letterSpacing="0.1"
+            android:text=""
+            android:textColor="#5A4F00"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
