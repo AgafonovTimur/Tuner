@@ -24,6 +24,9 @@ public class TunerDisplayView extends View {
 
     private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint glyphPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint readoutPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path path = new Path();
     private final RectF rect = new RectF();
 
@@ -40,6 +43,9 @@ public class TunerDisplayView extends View {
     public TunerDisplayView(Context c, AttributeSet a) {
         super(c, a);
         textPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
+        labelPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
+        glyphPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
+        readoutPaint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.BOLD));
     }
 
     public void setNote(String name, boolean isSharp, String oct) {
@@ -154,30 +160,37 @@ public class TunerDisplayView extends View {
     // ---------- крупная нота ----------
     private void drawNote(Canvas canvas, int w, int h, int col) {
         if (note.isEmpty()) return;
-        float glyphH = h * 0.30f;
-        float glyphW = glyphH * 0.62f;
-        float x = w * 0.30f, y = h * 0.08f;
+        glyphPaint.setColor(col);
+        glyphPaint.setTextAlign(Paint.Align.LEFT);
 
-        drawSegChar(canvas, note.charAt(0), x, y, glyphW, glyphH, col, 0f);
+        float noteSize = h * 0.30f;          // на 30% меньше прежнего
+        float smallSize = noteSize * 0.42f;
+        glyphPaint.setTextSize(noteSize);
 
-        float smallH = glyphH * 0.36f;
-        float sx = x + glyphW * 1.30f;
-        if (sharp) drawSharp(canvas, sx, y + glyphH * 0.02f, smallH * 0.62f, smallH, col);
-        if (!octave.isEmpty()) {
-            drawSegChar(canvas, octave.charAt(0), sx, y + glyphH * 0.72f,
-                    smallH * 0.60f, smallH, col, 0f);
-        }
+        String main = note;
+        float mainW = glyphPaint.measureText(main);
+        float baseY = h * 0.40f;
+        float x = w * 0.34f;
+        canvas.drawText(main, x, baseY, glyphPaint);
+
+        float sx = x + mainW + noteSize * 0.06f;
+        glyphPaint.setTextSize(smallSize);
+        if (sharp) canvas.drawText("#", sx, baseY - noteSize * 0.50f, glyphPaint);
+        if (!octave.isEmpty()) canvas.drawText(octave, sx, baseY + smallSize * 0.15f, glyphPaint);
     }
 
     // ---------- частота и центы ----------
     private void drawReadouts(Canvas canvas, int w, int h, int col) {
-        float ch = h * 0.042f;
-        float y = h * 0.775f;
-        String left = String.format("%.1f HZ", freq);
-        drawSegString(canvas, left, w * 0.16f, y, ch, col, false);
+        readoutPaint.setColor(col);
+        readoutPaint.setTextSize(h * 0.038f);
+        float y = h * 0.785f;
 
-        String right = String.format("%s%.1f C", cents >= 0 ? "+" : "-", Math.abs(cents));
-        drawSegString(canvas, right, w * 0.86f, y, ch, col, true);
+        readoutPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(String.format(java.util.Locale.US, "%.1f Hz", freq), w * 0.16f, y, readoutPaint);
+
+        readoutPaint.setTextAlign(Paint.Align.RIGHT);
+        String right = String.format(java.util.Locale.US, "%+.1f c", cents);
+        canvas.drawText(right, w * 0.85f, y, readoutPaint);
     }
 
     // ---------- полоса центов ----------
@@ -203,13 +216,14 @@ public class TunerDisplayView extends View {
         rect.set(l, y - half, r, y + half);
         canvas.drawRoundRect(rect, half * 0.9f, half * 0.9f, p);
 
-        textPaint.setTextSize(h * 0.062f);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        float ly = y + h * 0.085f;
+        labelPaint.setColor(col);
+        labelPaint.setTextSize(h * 0.031f);
+        labelPaint.setTextAlign(Paint.Align.CENTER);
+        float ly = y + h * 0.055f;
         String[] labels = {"-50", "-20", "0", "+20", "+50"};
         int[] vals = {-50, -20, 0, 20, 50};
         for (int i = 0; i < vals.length; i++) {
-            canvas.drawText(labels[i], xForCents(vals[i], left, right), ly, textPaint);
+            canvas.drawText(labels[i], xForCents(vals[i], left, right), ly, labelPaint);
         }
     }
 
@@ -217,134 +231,4 @@ public class TunerDisplayView extends View {
         return left + (c + 50f) / 100f * (right - left);
     }
 
-    // ---------- семисегментная графика ----------
-    private static final boolean[][] SEGS = new boolean[128][];
-    static {
-        //            a      b      c      d      e      f      g
-        put('0', true,  true,  true,  true,  true,  true,  false);
-        put('1', false, true,  true,  false, false, false, false);
-        put('2', true,  true,  false, true,  true,  false, true);
-        put('3', true,  true,  true,  true,  false, false, true);
-        put('4', false, true,  true,  false, false, true,  true);
-        put('5', true,  false, true,  true,  false, true,  true);
-        put('6', true,  false, true,  true,  true,  true,  true);
-        put('7', true,  true,  true,  false, false, false, false);
-        put('8', true,  true,  true,  true,  true,  true,  true);
-        put('9', true,  true,  true,  true,  false, true,  true);
-        put('A', true,  true,  true,  false, true,  true,  true);
-        put('B', false, false, true,  true,  true,  true,  true);
-        put('C', true,  false, false, true,  true,  true,  false);
-        put('D', false, true,  true,  true,  true,  false, true);
-        put('E', true,  false, false, true,  true,  true,  true);
-        put('F', true,  false, false, false, true,  true,  true);
-        put('G', true,  false, true,  true,  true,  true,  true);
-        put('H', false, true,  true,  false, true,  true,  true);
-        put('Z', true,  true,  false, true,  true,  false, true);
-        put(' ', false, false, false, false, false, false, false);
-        put('-', false, false, false, false, false, false, true);
-    }
-
-    private static void put(char c, boolean a, boolean b, boolean cc, boolean d,
-                            boolean e, boolean f, boolean g) {
-        SEGS[c] = new boolean[]{a, b, cc, d, e, f, g};
-    }
-
-    /** строка семисегментом; alignRight — x это правый край */
-    private void drawSegString(Canvas canvas, String s, float x, float y,
-                               float charH, int col, boolean alignRight) {
-        float cw = charH * 0.58f, gap = charH * 0.20f;
-        float total = 0;
-        for (char c : s.toCharArray()) total += widthOf(c, cw, charH) + gap;
-        total -= gap;
-        float startX = alignRight ? x - total : x;
-
-        canvas.save();
-        canvas.skew(-0.12f, 0f);
-        canvas.translate(y * 0.12f, 0);   // компенсация наклона
-        float cx = startX;
-        for (char c : s.toCharArray()) {
-            float ww = widthOf(c, cw, charH);
-            if (c == '.') {
-                p.setColor(col);
-                float t = charH * 0.16f;
-                canvas.drawRect(cx, y + charH - t, cx + t, y + charH, p);
-            } else if (c == '+') {
-                drawPlus(canvas, cx, y, ww, charH, col);
-            } else {
-                drawSegChar(canvas, c, cx, y, ww, charH, col, 0f);
-            }
-            cx += ww + gap;
-        }
-        canvas.restore();
-    }
-
-    private float widthOf(char c, float cw, float charH) {
-        if (c == '.') return charH * 0.16f;
-        if (c == ' ') return cw * 0.5f;
-        if (c == '1') return cw * 0.45f;
-        return cw;
-    }
-
-    private void drawSegChar(Canvas canvas, char c, float x, float y,
-                             float w, float h, int col, float skew) {
-        boolean[] s = c < 128 ? SEGS[Character.toUpperCase(c)] : null;
-        if (s == null) return;
-        float t = Math.min(w, h) * 0.20f;
-        p.setColor(col);
-        p.setStyle(Paint.Style.FILL);
-
-        if (s[0]) seg(canvas, x, y, x + w, y, t, true);
-        if (s[1]) seg(canvas, x + w, y, x + w, y + h / 2, t, false);
-        if (s[2]) seg(canvas, x + w, y + h / 2, x + w, y + h, t, false);
-        if (s[3]) seg(canvas, x, y + h, x + w, y + h, t, true);
-        if (s[4]) seg(canvas, x, y + h / 2, x, y + h, t, false);
-        if (s[5]) seg(canvas, x, y, x, y + h / 2, t, false);
-        if (s[6]) seg(canvas, x, y + h / 2, x + w, y + h / 2, t, true);
-    }
-
-    /** один сегмент — вытянутый шестиугольник со скошенными концами */
-    private void seg(Canvas canvas, float x1, float y1, float x2, float y2,
-                     float t, boolean horizontal) {
-        float half = t / 2f, m = t * 0.55f;
-        path.reset();
-        if (horizontal) {
-            path.moveTo(x1 + m * 0.4f, y1);
-            path.lineTo(x1 + m, y1 - half);
-            path.lineTo(x2 - m, y2 - half);
-            path.lineTo(x2 - m * 0.4f, y2);
-            path.lineTo(x2 - m, y2 + half);
-            path.lineTo(x1 + m, y1 + half);
-        } else {
-            path.moveTo(x1, y1 + m * 0.4f);
-            path.lineTo(x1 - half, y1 + m);
-            path.lineTo(x2 - half, y2 - m);
-            path.lineTo(x2, y2 - m * 0.4f);
-            path.lineTo(x2 + half, y2 - m);
-            path.lineTo(x1 + half, y1 + m);
-        }
-        path.close();
-        canvas.drawPath(path, p);
-    }
-
-    /** знак диеза наклонными штрихами */
-    private void drawSharp(Canvas canvas, float x, float y, float w, float h, int col) {
-        p.setColor(col);
-        p.setStyle(Paint.Style.STROKE);
-        p.setStrokeWidth(h * 0.17f);
-        float dx = w * 0.22f;
-        canvas.drawLine(x + w * 0.28f + dx, y, x + w * 0.10f, y + h, p);
-        canvas.drawLine(x + w * 0.72f + dx, y, x + w * 0.54f, y + h, p);
-        canvas.drawLine(x - w * 0.02f, y + h * 0.34f, x + w * 1.02f, y + h * 0.28f, p);
-        canvas.drawLine(x - w * 0.10f, y + h * 0.70f, x + w * 0.94f, y + h * 0.64f, p);
-        p.setStyle(Paint.Style.FILL);
-    }
-
-    private void drawPlus(Canvas canvas, float x, float y, float w, float h, int col) {
-        p.setColor(col);
-        float t = Math.min(w, h) * 0.20f;
-        float cx = x + w / 2f, cy = y + h * 0.62f;
-        float arm = w * 0.45f;
-        canvas.drawRect(cx - arm, cy - t / 2, cx + arm, cy + t / 2, p);
-        canvas.drawRect(cx - t / 2, cy - arm, cx + t / 2, cy + arm, p);
-    }
 }
