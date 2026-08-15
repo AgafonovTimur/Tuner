@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -18,10 +17,9 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
     private static final int A4_MIN = 400, A4_MAX = 480;
     private static final String PREFS_NAME = "tuner_settings";
 
-    private TextView a4Value, noteText, noteSharp, noteOctave, freqReadout, centsReadout, statusMsg;
+    private TextView a4Value, statusMsg;
     private TextView profChromatic, profGusli;
-    private View volFill;
-    private CentsScaleView centsScale;
+    private TunerDisplayView display;
 
     private int a4 = 432;
     private String profile = "chromatic";
@@ -58,16 +56,10 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
 
     private void bindViews() {
         a4Value = findViewById(R.id.a4Value);
-        noteText = findViewById(R.id.noteText);
-        noteSharp = findViewById(R.id.noteSharp);
-        noteOctave = findViewById(R.id.noteOctave);
-        freqReadout = findViewById(R.id.freqReadout);
-        centsReadout = findViewById(R.id.centsReadout);
         statusMsg = findViewById(R.id.statusMsg);
         profChromatic = findViewById(R.id.profChromatic);
         profGusli = findViewById(R.id.profGusli);
-        volFill = findViewById(R.id.volFill);
-        centsScale = findViewById(R.id.centsScale);
+        display = findViewById(R.id.display);
     }
 
     private void setupListeners() {
@@ -104,9 +96,9 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
     private void updateProfileButtons() {
         boolean isChromatic = profile.equals("chromatic");
         profChromatic.setBackgroundResource(isChromatic ? R.drawable.card_bg_active : R.drawable.card_bg);
-        profChromatic.setTextColor(isChromatic ? 0xFFFFFFFF : 0xFF8A8A8A);
         profGusli.setBackgroundResource(!isChromatic ? R.drawable.card_bg_active : R.drawable.card_bg);
-        profGusli.setTextColor(!isChromatic ? 0xFFFFFFFF : 0xFF8A8A8A);
+        profChromatic.setTextColor(0xFF8A8A8A);
+        profGusli.setTextColor(0xFF8A8A8A);
     }
 
     private void saveSettings() {
@@ -151,14 +143,9 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
                     : TunerMath.nearestChromatic(frequency, a4);
 
             boolean sharp = result.name.contains("#");
-            noteText.setText(result.name.replace("#", ""));
-            noteSharp.setText(sharp ? "#" : "");
-            noteOctave.setText(String.valueOf(result.octave));
-
-            freqReadout.setText(String.format("%.1f Hz", frequency));
-            centsReadout.setText(String.format("%s%.0f cents", result.cents >= 0 ? "+" : "", result.cents));
-
-            centsScale.setCents((float) result.cents);
+            display.setNote(result.name.replace("#", ""), sharp, String.valueOf(result.octave));
+            display.setFrequency(frequency);
+            display.setCents((float) result.cents);
 
             statusMsg.setText("");
         });
@@ -172,14 +159,7 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
     }
 
     private void updateVolume(double rms) {
-        int pct = (int) Math.min(100, Math.max(0, rms * 390));
-        FrameLayout parent = (FrameLayout) volFill.getParent();
-        int totalHeight = parent.getHeight();
-        if (totalHeight <= 0) return;
-        int fillHeight = totalHeight * pct / 100;
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) volFill.getLayoutParams();
-        lp.height = fillHeight;
-        volFill.setLayoutParams(lp);
+        display.setLevel(rms);
     }
 
     @Override

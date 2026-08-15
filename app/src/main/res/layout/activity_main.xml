@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#141414"
+    android:background="#000000"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="12dp">
 
-    <!-- A4 frequency card -->
+    <!-- частота A4 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,18 +15,18 @@
 
         <TextView
             android:id="@+id/minusBtn"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="@drawable/card_bg"
             android:gravity="center"
             android:text="−"
-            android:textColor="#B0B0B0"
-            android:textSize="32sp"
+            android:textColor="#8A8A8A"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="64dp"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -40,46 +40,46 @@
                 android:letterSpacing="0.2"
                 android:text="A"
                 android:textColor="#8A8A8A"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/a4Value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="432 Hz"
-                android:textColor="#E8C400"
-                android:textSize="26sp"
+                android:textColor="#8A8A8A"
+                android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/plusBtn"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="@drawable/card_bg"
             android:gravity="center"
             android:text="+"
-            android:textColor="#B0B0B0"
-            android:textSize="32sp"
+            android:textColor="#8A8A8A"
+            android:textSize="30sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- profile cards -->
+    <!-- профили -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/profChromatic"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="46dp"
             android:layout_weight="1"
             android:background="@drawable/card_bg_active"
             android:gravity="center"
             android:text="ХРОМАТИЧЕСКИЙ"
-            android:textColor="#FFFFFF"
+            android:textColor="#8A8A8A"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -90,7 +90,7 @@
         <TextView
             android:id="@+id/profGusli"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="46dp"
             android:layout_weight="1"
             android:background="@drawable/card_bg"
             android:gravity="center"
@@ -100,121 +100,17 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- volume + note card -->
-    <LinearLayout
+    <com.tunerapp.chromatic.TunerDisplayView
+        android:id="@+id/display"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/card_bg"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <FrameLayout
-            android:id="@+id/volTrack"
-            android:layout_width="28dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/volume_track_bg"
-            android:padding="3dp">
-
-            <View
-                android:id="@+id/volFill"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="bottom"
-                android:background="@drawable/volume_fill_bg" />
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/noteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="—"
-                android:textColor="#FFFFFF"
-                android:textSize="96sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/noteSharp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="#FFFFFF"
-                    android:textSize="40sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/noteOctave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="#8A8A8A"
-                    android:textSize="34sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/freqReadout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="end"
-        android:paddingRight="4dp"
-        android:text="0.0 Hz"
-        android:textColor="#8A8A8A"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <!-- cents scale card -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/card_bg"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="14dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="14dp">
-
-        <TextView
-            android:id="@+id/centsReadout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:gravity="center"
-            android:text="0 cents"
-            android:textColor="#8A8A8A"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <com.tunerapp.chromatic.CentsScaleView
-            android:id="@+id/centsScale"
-            android:layout_width="match_parent"
-            android:layout_height="110dp" />
-    </LinearLayout>
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/statusMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text=""
         android:textColor="#8A8A8A"
