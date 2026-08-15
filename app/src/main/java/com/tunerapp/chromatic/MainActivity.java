@@ -103,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
 
     private void updateProfileButtons() {
         boolean isChromatic = profile.equals("chromatic");
-        profChromatic.setBackgroundResource(isChromatic ? R.drawable.profile_btn_active : R.drawable.profile_btn_inactive);
-        profChromatic.setTextColor(isChromatic ? 0xFF0A0A08 : 0xFF5A4F00);
-        profGusli.setBackgroundResource(!isChromatic ? R.drawable.profile_btn_active : R.drawable.profile_btn_inactive);
-        profGusli.setTextColor(!isChromatic ? 0xFF0A0A08 : 0xFF5A4F00);
+        profChromatic.setBackgroundResource(isChromatic ? R.drawable.card_bg_active : R.drawable.card_bg);
+        profChromatic.setTextColor(isChromatic ? 0xFFFFFFFF : 0xFF8A8A8A);
+        profGusli.setBackgroundResource(!isChromatic ? R.drawable.card_bg_active : R.drawable.card_bg);
+        profGusli.setTextColor(!isChromatic ? 0xFFFFFFFF : 0xFF8A8A8A);
     }
 
     private void saveSettings() {
@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
             centsReadout.setText(String.format("%s%.0f cents", result.cents >= 0 ? "+" : "", result.cents));
 
             centsScale.setCents((float) result.cents);
-            centsScale.setInTune(Math.abs(result.cents) < 5);
 
             statusMsg.setText("");
         });
@@ -167,18 +166,13 @@ public class MainActivity extends AppCompatActivity implements PitchDetector.Lis
 
     @Override
     public void onSilence(double rms) {
-        runOnUiThread(() -> {
-            updateVolume(rms);
-            noteText.setText("—");
-            noteSharp.setText("");
-            noteOctave.setText("");
-            centsScale.setCents(0);
-            centsScale.setInTune(false);
-        });
+        // keep the last detected note, frequency and cents on screen;
+        // only the volume bar reacts to silence
+        runOnUiThread(() -> updateVolume(rms));
     }
 
     private void updateVolume(double rms) {
-        int pct = (int) Math.min(100, Math.max(0, rms * 300));
+        int pct = (int) Math.min(100, Math.max(0, rms * 390));
         FrameLayout parent = (FrameLayout) volFill.getParent();
         int totalHeight = parent.getHeight();
         if (totalHeight <= 0) return;

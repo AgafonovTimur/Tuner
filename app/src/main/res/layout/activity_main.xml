@@ -1,161 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/app"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#050504"
+    android:background="#141414"
     android:orientation="vertical"
-    android:padding="14dp">
+    android:padding="16dp">
 
+    <!-- A4 frequency card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/minusBtn"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/card_bg"
+            android:gravity="center"
+            android:text="−"
+            android:textColor="#B0B0B0"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/card_bg"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.2"
+                android:text="A"
+                android:textColor="#8A8A8A"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/a4Value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="432 Hz"
+                android:textColor="#E8C400"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/plusBtn"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/card_bg"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="#B0B0B0"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- profile cards -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/profChromatic"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_bg_active"
+            android:gravity="center"
+            android:text="ХРОМАТИЧЕСКИЙ"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <TextView
+            android:id="@+id/profGusli"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_bg"
+            android:gravity="center"
+            android:text="ГУСЛИ"
+            android:textColor="#8A8A8A"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- volume + note card -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:background="@drawable/screen_bg"
-        android:padding="18dp">
+        android:layout_marginTop="12dp"
+        android:background="@drawable/card_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-        <!-- A4 frequency selector -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/minusBtn"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:background="@drawable/circle_button_bg"
-                android:gravity="center"
-                android:text="−"
-                android:textColor="#E8C400"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:letterSpacing="0.3"
-                    android:text="A"
-                    android:textColor="#5A4F00"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:id="@+id/a4Value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="432 Hz"
-                    android:textColor="#E8C400"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/plusBtn"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:background="@drawable/circle_button_bg"
-                android:gravity="center"
-                android:text="+"
-                android:textColor="#E8C400"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- profile switch -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/profChromatic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/profile_btn_active"
-                android:letterSpacing="0.05"
-                android:paddingLeft="16dp"
-                android:paddingTop="7dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="7dp"
-                android:text="ХРОМАТИЧЕСКИЙ"
-                android:textColor="#0A0A08"
-                android:textSize="12sp" />
+        <FrameLayout
+            android:id="@+id/volTrack"
+            android:layout_width="28dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/volume_track_bg"
+            android:padding="3dp">
 
             <View
-                android:layout_width="10dp"
-                android:layout_height="1dp" />
+                android:id="@+id/volFill"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/volume_fill_bg" />
+        </FrameLayout>
 
-            <TextView
-                android:id="@+id/profGusli"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/profile_btn_inactive"
-                android:letterSpacing="0.05"
-                android:paddingLeft="16dp"
-                android:paddingTop="7dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="7dp"
-                android:text="ГУСЛИ"
-                android:textColor="#5A4F00"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- volume + note -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
-            <FrameLayout
-                android:layout_width="26dp"
-                android:layout_height="200dp"
-                android:background="@drawable/volume_track_bg"
-                android:padding="2dp">
-
-                <View
-                    android:id="@+id/volFill"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/volume_fill_bg" />
-            </FrameLayout>
+            <TextView
+                android:id="@+id/noteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="#FFFFFF"
+                android:textSize="96sp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/noteText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="—"
-                    android:textColor="#E8C400"
-                    android:textSize="90sp"
-                    android:textStyle="bold" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/noteSharp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
                     android:text=""
-                    android:textColor="#E8C400"
+                    android:textColor="#FFFFFF"
                     android:textSize="40sp"
                     android:textStyle="bold" />
 
@@ -163,27 +161,35 @@
                     android:id="@+id/noteOctave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="14dp"
                     android:text=""
-                    android:textColor="#E8C400"
-                    android:textSize="30sp"
+                    android:textColor="#8A8A8A"
+                    android:textSize="34sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
 
-        <!-- cents scale -->
+    <!-- cents scale card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/card_bg"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="14dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="14dp">
+
         <com.tunerapp.chromatic.CentsScaleView
             android:id="@+id/centsScale"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="4dp" />
+            android:layout_height="110dp" />
 
-        <!-- freq / cents readout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -193,7 +199,8 @@
                 android:layout_weight="1"
                 android:text="0.0 Hz"
                 android:textColor="#E8C400"
-                android:textSize="15sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/centsReadout"
@@ -203,20 +210,19 @@
                 android:gravity="end"
                 android:text="0 cents"
                 android:textColor="#E8C400"
-                android:textSize="15sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/statusMsg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:letterSpacing="0.1"
-            android:text=""
-            android:textColor="#5A4F00"
-            android:textSize="11sp" />
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/statusMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text=""
+        android:textColor="#8A8A8A"
+        android:textSize="12sp" />
 
 </LinearLayout>

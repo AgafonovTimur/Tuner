@@ -59,10 +59,15 @@ public class PitchDetector {
         recordingThread = new Thread(() -> {
             short[] buffer = new short[frameSize];
             double[] doubleBuffer = new double[frameSize];
+            int frameCounter = 0;
 
             while (running) {
                 int read = audioRecord.read(buffer, 0, frameSize);
                 if (read <= 0) continue;
+
+                // update the UI every 2nd frame -> ~0.19 s between updates
+                frameCounter++;
+                if (frameCounter % 2 != 0) continue;
 
                 double rms = 0;
                 for (int i = 0; i < read; i++) {
@@ -72,7 +77,7 @@ public class PitchDetector {
                 }
                 rms = Math.sqrt(rms / read);
 
-                if (rms < 0.01) {
+                if (rms < 0.007) {
                     if (listener != null) listener.onSilence(rms);
                     continue;
                 }
