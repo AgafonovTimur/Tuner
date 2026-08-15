@@ -65,9 +65,8 @@ public class PitchDetector {
                 int read = audioRecord.read(buffer, 0, frameSize);
                 if (read <= 0) continue;
 
-                // update the UI every 2nd frame -> ~0.19 s between updates
+                // обновляем UI на каждом кадре -> ~0.093 с между обновлениями
                 frameCounter++;
-                if (frameCounter % 2 != 0) continue;
 
                 double rms = 0;
                 for (int i = 0; i < read; i++) {

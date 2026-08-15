@@ -23,7 +23,12 @@ public class CentsScaleView extends View {
     private static final int COLOR_LABEL = Color.parseColor("#C9C9C9");
     private static final int COLOR_CENTER = Color.parseColor("#E0E0E0");
 
-    private float cents = 0f;
+    private float cents = 0f;          // текущее (отрисованное) значение
+    private float targetCents = 0f;    // куда стремимся
+    private boolean animating = false;
+    private long lastFrameNanos = 0L;
+    // за сколько секунд полоска проходит примерно 63% пути до цели
+    private static final float SMOOTH_TIME = 0.12f;
     private final RectF barRect = new RectF();
 
     public CentsScaleView(Context context, AttributeSet attrs) {
@@ -47,14 +52,36 @@ public class CentsScaleView extends View {
     }
 
     public void setCents(float c) {
-        this.cents = Math.max(-50f, Math.min(50f, c));
-        barPaint.setColor(Math.abs(this.cents) < 5f ? COLOR_GREEN : COLOR_YELLOW);
-        invalidate();
+        this.targetCents = Math.max(-50f, Math.min(50f, c));
+        if (!animating) {
+            animating = true;
+            lastFrameNanos = 0L;
+            postInvalidateOnAnimation();
+        }
+    }
+
+    private void step() {
+        long now = System.nanoTime();
+        float dt = lastFrameNanos == 0L ? 1f / 60f : (now - lastFrameNanos) / 1_000_000_000f;
+        lastFrameNanos = now;
+        if (dt > 0.1f) dt = 0.1f;
+
+        float diff = targetCents - cents;
+        if (Math.abs(diff) < 0.05f) {
+            cents = targetCents;
+            animating = false;
+        } else {
+            // экспоненциальное сглаживание, не зависящее от частоты кадров
+            float k = 1f - (float) Math.exp(-dt / SMOOTH_TIME);
+            cents += diff * k;
+        }
+        barPaint.setColor(Math.abs(cents) < 5f ? COLOR_GREEN : COLOR_YELLOW);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (animating) step();
         int w = getWidth();
         int h = getHeight();
         float d = getResources().getDisplayMetrics().density;
@@ -95,6 +122,8 @@ public class CentsScaleView extends View {
             if (c == 50) lx -= 16f * d;
             canvas.drawText(String.valueOf(c), lx, labelY, labelPaint);
         }
+
+        if (animating) postInvalidateOnAnimation();
     }
 
     private float xForCents(float c, int width) {
