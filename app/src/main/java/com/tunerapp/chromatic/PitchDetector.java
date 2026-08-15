@@ -76,7 +76,7 @@ public class PitchDetector {
                 }
                 rms = Math.sqrt(rms / read);
 
-                if (rms < 0.007) {
+                if (rms < 0.0091) {   // чувствительность снижена на 30%
                     if (listener != null) listener.onSilence(rms);
                     continue;
                 }

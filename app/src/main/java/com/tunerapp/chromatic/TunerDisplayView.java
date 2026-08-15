@@ -20,7 +20,7 @@ public class TunerDisplayView extends View {
     public static final int COLOR_YELLOW = Color.parseColor("#FDE21A");
     public static final int COLOR_ORANGE = Color.parseColor("#DE821E");
 
-    private static final float IN_TUNE = 5f;   // центов — считается «в ноль»
+    private static final float IN_TUNE = 2f;   // центов — считается «в ноль»
 
     private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -67,7 +67,7 @@ public class TunerDisplayView extends View {
     }
 
     public int accentColor() {
-        if (Math.abs(cents) < IN_TUNE) return COLOR_GREEN;
+        if (Math.abs(cents) < IN_TUNE) return COLOR_GREEN;   // строго меньше 2
         return cents > 0 ? COLOR_ORANGE : COLOR_YELLOW;
     }
 
@@ -182,15 +182,26 @@ public class TunerDisplayView extends View {
     // ---------- частота и центы ----------
     private void drawReadouts(Canvas canvas, int w, int h, int col) {
         readoutPaint.setColor(col);
-        readoutPaint.setTextSize(h * 0.038f);
-        float y = h * 0.785f;
+        float size = h * 0.038f;
+        readoutPaint.setTextSize(size);
+        float y = h * 0.785f + size;              // опущено на размер шрифта
+        float gap = size * 0.18f;                 // небольшой отступ до "Hz" / "c"
+        float digitW = readoutPaint.measureText("0");
 
+        // частота: число + Hz, сдвинуто левее на одну цифру
         readoutPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(String.format(java.util.Locale.US, "%.1f Hz", freq), w * 0.16f, y, readoutPaint);
+        String num = String.format(java.util.Locale.US, "%.1f", freq);
+        float fx = w * 0.16f - digitW;
+        canvas.drawText(num, fx, y, readoutPaint);
+        canvas.drawText("Hz", fx + readoutPaint.measureText(num) + gap, y, readoutPaint);
 
+        // центы: прижаты к правому краю
+        String cnum = String.format(java.util.Locale.US, "%+.1f", cents);
+        float rightEdge = w - size * 0.3f;
         readoutPaint.setTextAlign(Paint.Align.RIGHT);
-        String right = String.format(java.util.Locale.US, "%+.1f c", cents);
-        canvas.drawText(right, w * 0.85f, y, readoutPaint);
+        canvas.drawText("c", rightEdge, y, readoutPaint);
+        float cEnd = rightEdge - readoutPaint.measureText("c") - gap;
+        canvas.drawText(cnum, cEnd, y, readoutPaint);
     }
 
     // ---------- полоса центов ----------
